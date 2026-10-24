@@ -1,0 +1,8 @@
+{
+    "sqlconnection": "DRIVER={ODBC Driver 17 for SQL Server};SERVER=Neeraj\\SQLEXPRESS;PORT=1433;DATABASE=BusyComp0001_db12026;UID=Sa;PWD=Neeraj@9821",
+    "sql_query": "select * from Attendance where Punch_time > ?",
+    "lastDate": "2026-09-25 18:00:00",
+    "user_filed": "",
+    "mongo_db": "testt",
+    "company_id": "tenant-cbxtest-7259"
+}

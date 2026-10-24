@@ -1,0 +1,58 @@
+{
+    "jobs": [
+        {
+            "name": "sales",
+            "collection": "busy_sales",
+            "incremental_field": "VchCode",
+            "last_value": 8,
+            "unique_key": "VchCode",
+            "sql_query": "SELECT H.VchCode, H.VchType, H.Date AS VoucherDate, H.VchNo AS VoucherNumber, H.MasterCode1 AS PartyCode, Party.Name AS PartyName, H.MasterCode2 AS StoreCode, Store.Name AS StoreName, H.VchAmtBaseCur AS VoucherAmount, H.VchSalePurcAmt AS SalesPurchaseAmount, H.VchCancelled, H.Cancelled FROM dbo.Tran1 AS H LEFT JOIN dbo.Master1 AS Party ON H.MasterCode1 = Party.Code LEFT JOIN dbo.Master1 AS Store ON H.MasterCode2 = Store.Code WHERE H.VchType = 9 AND ISNULL(H.VchCancelled, 0) = 0 AND ISNULL(H.Cancelled, 0) = 0 AND H.VchCode > ? ORDER BY H.VchCode"
+        },
+        {
+            "name": "purchases",
+            "collection": "busy_purchases",
+            "incremental_field": "VchCode",
+            "last_value": 9,
+            "unique_key": "VchCode",
+            "sql_query": "SELECT H.VchCode, H.VchType, H.Date AS VoucherDate, H.VchNo AS VoucherNumber, H.MasterCode1 AS PartyCode, Party.Name AS PartyName, H.MasterCode2 AS StoreCode, Store.Name AS StoreName, H.VchAmtBaseCur AS VoucherAmount, H.VchSalePurcAmt AS SalesPurchaseAmount, H.VchCancelled, H.Cancelled FROM dbo.Tran1 AS H LEFT JOIN dbo.Master1 AS Party ON H.MasterCode1 = Party.Code LEFT JOIN dbo.Master1 AS Store ON H.MasterCode2 = Store.Code WHERE H.VchType = 2 AND ISNULL(H.VchCancelled, 0) = 0 AND ISNULL(H.Cancelled, 0) = 0 AND H.VchCode > ? ORDER BY H.VchCode"
+        },
+        {
+            "name": "purchase_items",
+            "collection": "busy_purchase_items",
+            "incremental_field": "VchCode",
+            "last_value": 9,
+            "unique_key": [
+                "VchCode",
+                "LineNumber"
+            ],
+            "sql_query": "SELECT H.VchCode, H.VchType, H.Date AS VoucherDate, H.VchNo AS VoucherNumber, H.MasterCode1 AS PartyCode, Party.Name AS PartyName, H.MasterCode2 AS StoreCode, Store.Name AS StoreName, H.VchAmtBaseCur AS VoucherAmount, H.VchSalePurcAmt AS SalesPurchaseAmount, D.SrNo AS LineNumber, D.MasterCode1 AS ItemCode, Item.Name AS ItemName, D.MasterCode2 AS ItemStoreCode, ItemStore.Name AS ItemStoreName, D.Value1 AS PurchaseQuantity, D.Value2, D.Value3, D.D1, D.D2, D.D3, D.D4, D.D5, D.D6, D.D7, D.D8, D.D9, D.D10 FROM dbo.Tran1 AS H INNER JOIN dbo.Tran2 AS D ON H.VchCode = D.VchCode AND H.VchType = D.VchType LEFT JOIN dbo.Master1 AS Party ON H.MasterCode1 = Party.Code LEFT JOIN dbo.Master1 AS Store ON H.MasterCode2 = Store.Code LEFT JOIN dbo.Master1 AS Item ON D.MasterCode1 = Item.Code LEFT JOIN dbo.Master1 AS ItemStore ON D.MasterCode2 = ItemStore.Code WHERE H.VchType = 2 AND D.RecType = 2 AND ISNULL(H.VchCancelled, 0) = 0 AND ISNULL(H.Cancelled, 0) = 0 AND Item.MasterType = 6 AND H.VchCode > ? ORDER BY H.VchCode, D.SrNo"
+        },
+        {
+            "name": "sales_items",
+            "collection": "busy_sales_items",
+            "incremental_field": "VchCode",
+            "last_value": 8,
+            "unique_key": [
+                "VchCode",
+                "LineNumber"
+            ],
+            "sql_query": "SELECT H.VchCode, H.VchType, H.Date AS VoucherDate, H.VchNo AS VoucherNumber, H.MasterCode1 AS PartyCode, Party.Name AS PartyName, H.MasterCode2 AS StoreCode, Store.Name AS StoreName, H.VchAmtBaseCur AS VoucherAmount, H.VchSalePurcAmt AS SalesPurchaseAmount, D.SrNo AS LineNumber, D.MasterCode1 AS ItemCode, Item.Name AS ItemName, D.MasterCode2 AS ItemStoreCode, ItemStore.Name AS ItemStoreName, D.Value1 AS SalesQuantity, D.Value2, D.Value3, D.D1, D.D2, D.D3, D.D4, D.D5, D.D6, D.D7, D.D8, D.D9, D.D10 FROM dbo.Tran1 AS H INNER JOIN dbo.Tran2 AS D ON H.VchCode = D.VchCode AND H.VchType = D.VchType LEFT JOIN dbo.Master1 AS Party ON H.MasterCode1 = Party.Code LEFT JOIN dbo.Master1 AS Store ON H.MasterCode2 = Store.Code LEFT JOIN dbo.Master1 AS Item ON D.MasterCode1 = Item.Code LEFT JOIN dbo.Master1 AS ItemStore ON D.MasterCode2 = ItemStore.Code WHERE H.VchType = 9 AND D.RecType = 2 AND ISNULL(H.VchCancelled, 0) = 0 AND ISNULL(H.Cancelled, 0) = 0 AND Item.MasterType = 6 AND H.VchCode > ? ORDER BY H.VchCode, D.SrNo"
+        },
+        {
+            "name": "item_master",
+            "collection": "busy_items",
+            "incremental_field": "item_code",
+            "last_value": 1293,
+            "unique_key": "item_code",
+            "sql_query": "SELECT I.Code AS item_code, I.Name AS item_name, I.Alias AS alias, I.PrintName AS print_name, I.ParentGrp AS parent_group_code, G.Name AS item_group, I.HSNCode AS hsn_code FROM dbo.Master1 AS I LEFT JOIN dbo.Master1 AS G ON I.ParentGrp = G.Code WHERE I.MasterType = 6 AND I.Code > ? ORDER BY I.Code"
+        },
+        {
+            "name": "customers",
+            "collection": "busy_customers",
+            "incremental_field": "account_code",
+            "last_value": 1297,
+            "unique_key": "account_code",
+            "sql_query": "SELECT C.Code AS account_code, C.Name AS account_name, C.Alias AS alias, C.PrintName AS print_name, C.ParentGrp AS parent_group_code, G.Name AS parent_group_name, CASE WHEN C.ParentGrp = 116 THEN 'Customer' WHEN C.ParentGrp = 117 THEN 'Supplier' END AS account_type FROM dbo.Master1 AS C LEFT JOIN dbo.Master1 AS G ON C.ParentGrp = G.Code WHERE C.MasterType = 2 AND C.ParentGrp IN (116, 117) AND C.Code > ? ORDER BY C.Code"
+        }
+    ]
+}
